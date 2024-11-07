@@ -1,53 +1,55 @@
 import Gift.Gift;
+import SQLDataBase.DatabaseConnector;
 import Sweet.*;
 import commandInterface.*;
 import java.util.*;
+import java.sql.*;
 
-
-public class NewYearGift {
+class NewYearGiftApp {
     public static void main(String[] args) {
-        Gift gift = new Gift();
-        Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=NewYearGiftsDB;encrypt=true;trustServerCertificate=true";
+        String user = "sa";
+        String password = "1234";
 
-        // Creating commands
-        Command addSweetCommand = new AddSweetCommand(gift, scanner);
-        Command sortSweetsCommand = new SortSweetsCommand(gift, Comparator.comparingDouble(Sweet::getSugarContent));
-        Command findSweetsCommand = new FindSweetsBySugarContentCommand(gift, 10, 35);
+        try (Scanner scanner = new Scanner(System.in);
+             DatabaseConnector dbConnector = new DatabaseConnector(url, user, password)) {
+            boolean exit = false;
 
-        // Creating a menu using HashMap
-        Map<Integer, Command> menu = new HashMap<>();
-        menu.put(1, addSweetCommand);
-        menu.put(2, sortSweetsCommand);
-        menu.put(3, findSweetsCommand);
+            // Create commands
+            Command addGiftCommand = new AddGiftCommand(dbConnector, scanner);
+            Command addSweetCommand = new AddSweetCommand(dbConnector, scanner);
+            Command displayGiftsCommand = new DisplayGiftsCommand(dbConnector);
 
-        while (!exit) {
-            // Displaying menu options
-            System.out.println("\n--- New Year Gift Menu ---");
-            System.out.println("1. Add a candy");
-            System.out.println("2. Sort sweets by sugar content");
-            System.out.println("3. Find sweets by sugar content range");
-            System.out.println("4. Show total weight of the gift");
-            System.out.println("5. Exit");
-            System.out.print("Choose an option: ");
+            // Menu using HashMap
+            Map<Integer, Command> menu = new HashMap<>();
+            menu.put(1, addGiftCommand);
+            menu.put(2, addSweetCommand);
+            menu.put(3, displayGiftsCommand);
 
-            int choice = scanner.nextInt();
+            while (!exit) {
+                // Displaying menu options
+                System.out.println("\n--- New Year Gift Menu ---");
+                System.out.println("1. Add a gift");
+                System.out.println("2. Add a sweet to the latest gift");
+                System.out.println("3. Display all gifts");
+                System.out.println("4. Exit");
+                System.out.print("Choose an option: ");
 
-            if (choice == 5) {
-                exit = true;
-            } else if (choice == 4) {
-                // Display total weight
-                System.out.println("Total weight of the gift: " + gift.getTotalWeight() + " grams");
-            } else {
-                Command command = menu.get(choice);
-                if (command != null) {
-                    command.execute();
+                int choice = scanner.nextInt();
+
+                if (choice == 4) {
+                    exit = true;
                 } else {
-                    System.out.println("Invalid option. Please try again.");
+                    Command command = menu.get(choice);
+                    if (command != null) {
+                        command.execute();
+                    } else {
+                        System.out.println("Invalid option. Please try again.");
+                    }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        scanner.close();
     }
 }

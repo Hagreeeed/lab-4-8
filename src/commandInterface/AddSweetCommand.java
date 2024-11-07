@@ -1,29 +1,37 @@
 package commandInterface;
-import Gift.Gift;
-import Sweet.*;
+
+import SQLDataBase.DatabaseConnector;
+
 import java.util.Scanner;
+import java.sql.*;
 
 public class AddSweetCommand implements Command {
-    private Gift gift;
+    private DatabaseConnector dbConnector;
     private Scanner scanner;
 
-    public AddSweetCommand(Gift gift, Scanner scanner) {
-        this.gift = gift;
+    public AddSweetCommand(DatabaseConnector dbConnector, Scanner scanner) {
+        this.dbConnector = dbConnector;
         this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        System.out.print("Enter candy name: ");
-        String name = scanner.next();
-        System.out.print("Enter candy weight (grams): ");
-        double weight = scanner.nextDouble();
-        System.out.print("Enter candy sugar content (grams): ");
-        double sugarContent = scanner.nextDouble();
+        try {
+            int giftId = dbConnector.getLatestGiftId();
+            if (giftId == -1) {
+                System.out.println("No gift found. Please add a gift first.");
+                return;
+            }
+            System.out.print("Enter sweet name: ");
+            String sweetName = scanner.next();
+            System.out.print("Enter sweet weight (grams): ");
+            double weight = scanner.nextDouble();
+            System.out.print("Enter sweet sugar content (grams): ");
+            double sugarContent = scanner.nextDouble();
 
-        // You can choose the type of candy dynamically as needed; here we use ChocolateCandy as an example
-        Sweet newCandy = new ChocolateCandy(name, weight, sugarContent);
-        gift.addSweet(newCandy);
-        System.out.println("Candy added successfully!");
+            dbConnector.addSweet(giftId, sweetName, weight, sugarContent);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
