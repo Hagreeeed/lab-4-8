@@ -1,21 +1,21 @@
 package commandInterface;
 
-import SQLDataBase.DatabaseConnector;
-import java.sql.*;
+import Service.Service;
 
 public class DisplayGiftsCommand implements Command {
-    private DatabaseConnector dbConnector;
+    private final Service service;
 
-    public DisplayGiftsCommand(DatabaseConnector dbConnector) {
-        this.dbConnector = dbConnector;
+    public DisplayGiftsCommand(Service service) {
+        this.service = service;
     }
 
     @Override
     public void execute() {
-        try {
-            dbConnector.displayGifts();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        service.displayGifts();  // Викликаємо метод Service для відображення подарунків
+    }
+
+    @Override
+    public String getDescription() {
+        return "Display Gifts";
     }
 }

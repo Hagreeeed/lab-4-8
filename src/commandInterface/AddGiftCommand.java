@@ -1,27 +1,26 @@
 package commandInterface;
-import Gift.Gift;
-import SQLDataBase.DatabaseConnector;
-import Sweet.*;
+
+import Service.Service;
 import java.util.Scanner;
-import java.sql.*;
 
 public class AddGiftCommand implements Command {
-    private DatabaseConnector dbConnector;
-    private Scanner scanner;
+    private final Service service;
+    private final Scanner scanner;
 
-    public AddGiftCommand(DatabaseConnector dbConnector, Scanner scanner) {
-        this.dbConnector = dbConnector;
+    public AddGiftCommand(Service service, Scanner scanner) {
+        this.service = service;
         this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        try {
-            System.out.print("Enter gift name: ");
-            String giftName = scanner.next();
-            dbConnector.addGift(giftName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        System.out.print("Enter gift name: ");
+        String giftName = scanner.nextLine();
+        service.addGift(giftName);  // Викликаємо метод Service для додавання подарунка
+    }
+
+    @Override
+    public String getDescription() {
+        return "Add Gift";
     }
 }

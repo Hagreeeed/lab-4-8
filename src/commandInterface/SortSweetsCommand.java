@@ -20,4 +20,9 @@ public class SortSweetsCommand implements Command {
         gift.sortSweets(comparator);
         System.out.println("Sweets sorted by sugar content.");
     }
+
+    @Override
+    public String getDescription() {
+        return "";
+    }
 }

@@ -1,37 +1,40 @@
 package commandInterface;
 
-import SQLDataBase.DatabaseConnector;
-
+import Service.Service;
 import java.util.Scanner;
-import java.sql.*;
 
 public class AddSweetCommand implements Command {
-    private DatabaseConnector dbConnector;
-    private Scanner scanner;
+    private final Service service;
+    private final Scanner scanner;
 
-    public AddSweetCommand(DatabaseConnector dbConnector, Scanner scanner) {
-        this.dbConnector = dbConnector;
+    public AddSweetCommand(Service service, Scanner scanner) {
+        this.service = service;
         this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        try {
-            int giftId = dbConnector.getLatestGiftId();
-            if (giftId == -1) {
-                System.out.println("No gift found. Please add a gift first.");
-                return;
-            }
-            System.out.print("Enter sweet name: ");
-            String sweetName = scanner.next();
-            System.out.print("Enter sweet weight (grams): ");
-            double weight = scanner.nextDouble();
-            System.out.print("Enter sweet sugar content (grams): ");
-            double sugarContent = scanner.nextDouble();
+        System.out.print("Enter sweet name: ");
+        String sweetName = scanner.nextLine();
 
-            dbConnector.addSweet(giftId, sweetName, weight, sugarContent);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        System.out.print("Enter weight: ");
+        double weight = scanner.nextDouble();
+
+        System.out.print("Enter sugar content: ");
+        double sugarContent = scanner.nextDouble();
+
+        scanner.nextLine();  // Очистка буфера
+
+        System.out.print("Enter the gift ID to add the sweet to: ");
+        int giftId = scanner.nextInt();
+
+        scanner.nextLine();  // Очистка буфера
+
+        service.addSweet(giftId, sweetName, weight, sugarContent);  // Викликаємо метод Service для додавання солодоща
+    }
+
+    @Override
+    public String getDescription() {
+        return "Add Sweet";
     }
 }

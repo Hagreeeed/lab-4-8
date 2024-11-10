@@ -26,4 +26,9 @@ public class FindSweetsBySugarContentCommand implements Command {
             }
         }
     }
+
+    @Override
+    public String getDescription() {
+        return "";
+    }
 }
