@@ -1,11 +1,11 @@
-package commandInterface;
+package command;
 
-import Service.Service;
+import giftService.GiftService;
 
 public class DisplayGiftsCommand implements Command {
-    private final Service service;
+    private final GiftService service;
 
-    public DisplayGiftsCommand(Service service) {
+    public DisplayGiftsCommand(GiftService service) {
         this.service = service;
     }
 

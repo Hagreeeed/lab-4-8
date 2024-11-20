@@ -1,13 +1,13 @@
-package commandInterface;
+package command;
 
-import Service.Service;
+import giftService.GiftService;
 import java.util.Scanner;
 
 public class AddGiftCommand implements Command {
-    private final Service service;
+    private final GiftService service;
     private final Scanner scanner;
 
-    public AddGiftCommand(Service service, Scanner scanner) {
+    public AddGiftCommand(GiftService service, Scanner scanner) {
         this.service = service;
         this.scanner = scanner;
     }

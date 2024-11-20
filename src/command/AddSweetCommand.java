@@ -1,13 +1,13 @@
-package commandInterface;
+package command;
 
-import Service.Service;
+import giftService.GiftService;
 import java.util.Scanner;
 
 public class AddSweetCommand implements Command {
-    private final Service service;
+    private final GiftService service;
     private final Scanner scanner;
 
-    public AddSweetCommand(Service service, Scanner scanner) {
+    public AddSweetCommand(GiftService service, Scanner scanner) {
         this.service = service;
         this.scanner = scanner;
     }

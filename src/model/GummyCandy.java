@@ -1,4 +1,4 @@
-package Sweet;
+package model;
 
 public class GummyCandy extends Sweet {
     public GummyCandy(String name, double weight, double sugarContent) {

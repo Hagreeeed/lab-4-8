@@ -1,4 +1,4 @@
-package Sweet;
+package model;
 
 // Base class for sweets
 public abstract class Sweet {

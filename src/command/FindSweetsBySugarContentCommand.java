@@ -1,6 +1,6 @@
-package commandInterface;
-import Gift.Gift;
-import Sweet.*;
+package command;
+import gift.Gift;
+import model.*;
 import java.util.List;
 
 public class FindSweetsBySugarContentCommand implements Command {

@@ -1,23 +1,37 @@
 package SQLDataBase;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DatabaseConnector implements AutoCloseable {
     private Connection connection;
 
     public DatabaseConnector() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=NewYearGiftsDB;encrypt=true;trustServerCertificate=true", "sa", "1234");
+        connection = DriverManager.getConnection(
+                "jdbc:sqlserver://localhost:1433;databaseName=NewYearGiftsDB;encrypt=true;trustServerCertificate=true",
+                "sa",
+                "1234"
+        );
+    }
+
+    // Метод для отримання об'єкта Connection
+    public Connection getConnection() {
+        return connection;
     }
 
     // Метод для виконання запиту на додавання/оновлення даних
     public int executeUpdate(String query, Object... params) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {
-                preparedStatement.setObject(i + 1, params[i]);
+                preparedStatement.setObject(i + 1, params[i]); // Встановлення параметрів
             }
             return preparedStatement.executeUpdate();
         }
     }
+
 
     // Метод для виконання запиту на отримання даних
     public ResultSet executeQuery(String query, Object... params) throws SQLException {
